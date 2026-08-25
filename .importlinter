@@ -1,0 +1,10 @@
+[importlinter]
+root_package = backend
+
+[importlinter:contract:1]
+name = agents cannot reach payment_core
+type = forbidden
+source_modules =
+    backend.agents
+forbidden_modules =
+    backend.payment_core
