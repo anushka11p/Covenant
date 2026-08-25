@@ -1,5 +1,5 @@
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -21,7 +21,7 @@ def _log(session: Session, *, transaction_id, mandate_id, event_type, actor, rea
         actor=actor,
         reason_summary=reason_summary,
         rule_fired=rule_fired,
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(timezone.utc).replace(tzinfo=None),
     ))
     session.commit()
 

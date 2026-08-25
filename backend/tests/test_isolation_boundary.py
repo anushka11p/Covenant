@@ -2,7 +2,7 @@ from __future__ import annotations
 import ast
 import pathlib
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -68,7 +68,7 @@ def test_policy_engine_legitimate_path_still_works():
         max_transaction_amount=250000, daily_limit=250000, monthly_limit=600000,
         currency="INR", hard_constraints={"excluded_allergens": ["chicken"]},
         allowed_payment_method="test_upi", purpose="test",
-        expiry=datetime.utcnow() + timedelta(days=30), signature="test-sig",
+        expiry=datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(days=30), signature="test-sig",
     )
     session.add(mandate)
     session.commit()
