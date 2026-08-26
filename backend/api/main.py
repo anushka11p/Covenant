@@ -37,3 +37,6 @@ app.include_router(audit_router)
 
 from api.revenue import router as revenue_router
 app.include_router(revenue_router)
+
+from api.demo_attack import router as demo_attack_router
+app.include_router(demo_attack_router)
