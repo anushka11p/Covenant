@@ -34,3 +34,6 @@ app.include_router(transactions_router)
 
 from api.audit import router as audit_router
 app.include_router(audit_router)
+
+from api.revenue import router as revenue_router
+app.include_router(revenue_router)
