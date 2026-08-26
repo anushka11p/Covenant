@@ -1,17 +1,51 @@
 import { useState } from "react";
-import PipelineScene from "./components/Pipeline/PipelineScene";
+import OverviewPage from "./pages/OverviewPage";
+import ShopStation from "./components/stations/CatalogStation";
+import MandateStation from "./components/stations/MandateStation";
+import AIDecisionStation from "./components/stations/AIDecisionStation";
+import AttackStation from "./components/stations/AttackStation";
+import AuditStation from "./components/stations/AuditStation";
+import RevenueStation from "./components/stations/RevenueStation";
+import IsolationProofStation from "./components/stations/IsolationProofStation";
+import Nav from "./components/Nav";
+import { colors } from "./theme";
 
-const STATES = ["idle", "moving", "atGate", "blocked", "recovering", "paid"];
+const MERCHANT_ID = 1;
+const PRINCIPAL_ID = 1;
 
 export default function App() {
-  const [state, setState] = useState("idle");
+  const [page, setPage] = useState("overview");
+  const [mandateId, setMandateId] = useState(null);
+
+  if (page === "overview") {
+    return <OverviewPage merchantId={MERCHANT_ID} activeNav={page} onNavigate={setPage} />;
+  }
+
   return (
-    <div style={{ padding: 60, background: "#FBF9F4", minHeight: "100vh" }}>
-      <PipelineScene state={state} label="Classic Formula ₹1,150" />
-      <div style={{ marginTop: 40, display: "flex", gap: 8 }}>
-        {STATES.map((s) => (
-          <button key={s} onClick={() => setState(s)} style={{ padding: "8px 14px" }}>{s}</button>
-        ))}
+    <div style={{ background: colors.bg, minHeight: "100vh" }}>
+      <Nav active={page} onNavigate={setPage} />
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+        {page === "shop" && <ShopStation merchantId={MERCHANT_ID} revealCompromised={false} />}
+        {page === "buyer" && (
+          <>
+            <MandateStation principalId={PRINCIPAL_ID} merchantId={MERCHANT_ID} onCreated={(m) => setMandateId(m.mandate_id)} />
+            <div style={{ marginTop: 40 }}>
+              <AIDecisionStation mandateId={mandateId} />
+            </div>
+          </>
+        )}
+        {page === "protection" && (
+          <>
+            <AttackStation mandateId={mandateId} onCompleted={() => {}} />
+            <div style={{ marginTop: 40 }}>
+              <AuditStation mandateId={mandateId} />
+            </div>
+            <div style={{ marginTop: 40 }}>
+              <IsolationProofStation />
+            </div>
+          </>
+        )}
+        {page === "revenue" && <RevenueStation merchantId={MERCHANT_ID} />}
       </div>
     </div>
   );
