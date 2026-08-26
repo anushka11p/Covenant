@@ -1,10 +1,19 @@
 from __future__ import annotations
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from models.db import get_engine, get_session_factory, init_db
 
 app = FastAPI(title="Covenant")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 engine = get_engine("sqlite:///./covenant.db")
 init_db(engine)
@@ -22,6 +31,7 @@ def get_session():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 from api.catalog import router as catalog_router
 app.include_router(catalog_router)
