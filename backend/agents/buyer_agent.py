@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from agents.baseline_rule import cheapest_safe_sku
-from agents.stock_estimate import estimate_stock_interval
+from agents.stock_estimate import estimate_stock_interval, compute_days_vs_baseline
 from agents.reasoning import get_agent_decision
 
 
@@ -16,20 +16,17 @@ class Proposal:
     reasoning_summary: str
     baseline_sku: str | None = None
     baseline_price_paise: int | None = None
+    days_vs_baseline: int | None = None
 
 
 def build_proposal(*, mandate_id: str, nonce: str, preferred: dict, substitute: dict,
                     last_order_qty: int, days_per_unit_for_sku: int, days_since_last_order: int,
                     monthly_headroom_paise: int, excluded_allergens: list[str]) -> Proposal | None:
-    """
-    Full pipeline: computes the stock interval, computes the deterministic
-    baseline (for the counterfactual artifact), calls the LLM for the real
-    decision, and returns a Proposal — or None if the agent decided to defer.
-    """
     stock_interval = estimate_stock_interval(
         last_order_qty=last_order_qty, days_per_unit_for_sku=days_per_unit_for_sku,
         days_since_last_order=days_since_last_order,
     )
+    days_vs_baseline = compute_days_vs_baseline(stock_interval["point_estimate"])
 
     baseline = cheapest_safe_sku(
         candidates=[
@@ -53,6 +50,7 @@ def build_proposal(*, mandate_id: str, nonce: str, preferred: dict, substitute: 
         mandate_id=mandate_id, sku=chosen["sku"], amount_paise=chosen["price_paise"], qty=1,
         nonce=nonce, reasoning_summary=decision["reasoning_summary"],
         baseline_sku=baseline["sku"], baseline_price_paise=baseline["price_paise"],
+        days_vs_baseline=days_vs_baseline,
     )
 
 

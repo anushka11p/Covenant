@@ -53,6 +53,7 @@ class PolicyEngine:
             baseline_sku=proposal.baseline_sku,
             baseline_price_paise=proposal.baseline_price_paise,
             reasoning_summary=proposal.reasoning_summary,
+            days_vs_baseline=proposal.days_vs_baseline,
         )
         session.add(txn)
         try:
