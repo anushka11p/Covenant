@@ -25,3 +25,6 @@ def health():
 
 from api.catalog import router as catalog_router
 app.include_router(catalog_router)
+
+from api.mandates import router as mandates_router
+app.include_router(mandates_router)
