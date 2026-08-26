@@ -31,3 +31,6 @@ app.include_router(mandates_router)
 
 from api.transactions import router as transactions_router
 app.include_router(transactions_router)
+
+from api.audit import router as audit_router
+app.include_router(audit_router)
