@@ -22,3 +22,6 @@ def get_session():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+from api.catalog import router as catalog_router
+app.include_router(catalog_router)
