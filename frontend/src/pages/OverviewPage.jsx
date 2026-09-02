@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { colors, type, shadow } from "../theme";
 import { getCatalog } from "../api";
 import Nav from "../components/Nav";
-import ProductVisual from "../components/ProductVisual";
 
 export default function OverviewPage({ merchantId, activeNav, onNavigate }) {
   const [preview, setPreview] = useState(null);
@@ -25,7 +24,7 @@ export default function OverviewPage({ merchantId, activeNav, onNavigate }) {
             Let AI shop for your customers. Every purchase is independently verified before payment.
           </p>
           <button
-            onClick={() => onNavigate("shop")}
+            onClick={() => onNavigate("demo")}
             style={{
               marginTop: 32, padding: "14px 28px", background: colors.verify, color: "#fff",
               border: "none", borderRadius: 8, fontSize: 15, fontWeight: 700, cursor: "pointer",
@@ -38,7 +37,14 @@ export default function OverviewPage({ merchantId, activeNav, onNavigate }) {
 
         <div>
           {preview ? (
-            <ProductVisual name={preview[0].name} price={`₹${(preview[0].price_paise / 100).toFixed(0)}`} verified />
+            <div style={{
+              width: 220, padding: 24, borderRadius: 14, background: "#fff",
+              border: `1px solid ${colors.border}`, boxShadow: shadow.raised, textAlign: "center",
+            }}>
+              <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 10, background: colors.tan }} />
+              <div style={{ ...type.body, fontWeight: 700, color: colors.textPrimary }}>{preview[0].name}</div>
+              <div style={{ ...type.h3, color: colors.forest, marginTop: 6 }}>₹{(preview[0].price_paise / 100).toFixed(0)}</div>
+            </div>
           ) : (
             <div style={{ color: colors.textMuted, fontSize: 13 }}>Loading…</div>
           )}
@@ -76,7 +82,7 @@ export default function OverviewPage({ merchantId, activeNav, onNavigate }) {
 
 function MetricBlock({ value, label }) {
   return (
-    <div style={{ flex: 1, padding: 24, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12, boxShadow: colors.shadow?.soft }}>
+    <div style={{ flex: 1, padding: 24, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12 }}>
       <div style={{ ...type.headline, fontSize: 32, color: colors.textPrimary }}>{value}</div>
       <div style={{ ...type.small, color: colors.textSecondary, marginTop: 8 }}>{label}</div>
     </div>
