@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "";
 
 export async function getCatalog(merchantId) {
   const res = await fetch(`${BASE_URL}/catalog/${merchantId}`);

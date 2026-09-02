@@ -50,3 +50,15 @@ app.include_router(revenue_router)
 
 from api.demo_attack import router as demo_attack_router
 app.include_router(demo_attack_router)
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+
+app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_DIR, "assets")), name="assets")
+
+@app.get("/{full_path:path}")
+def serve_frontend(full_path: str):
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
