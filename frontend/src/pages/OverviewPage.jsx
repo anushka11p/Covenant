@@ -1,90 +1,100 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { colors, type, shadow } from "../theme";
-import { getCatalog } from "../api";
 import Nav from "../components/Nav";
+import { useReveal } from "../hooks/useReveal";
 
-export default function OverviewPage({ merchantId, activeNav, onNavigate }) {
-  const [preview, setPreview] = useState(null);
-
-  useEffect(() => {
-    getCatalog(merchantId).then((raw) => setPreview(raw.products.slice(0, 1)));
-  }, [merchantId]);
+export default function OverviewPage({ activeNav, onNavigate }) {
+  useReveal();
 
   return (
-    <div>
+    <div style={{ background: colors.bg, minHeight: "100vh" }}>
       <Nav active={activeNav} onNavigate={onNavigate} />
 
-      <div style={{ padding: "72px 56px", display: "flex", gap: 72, alignItems: "center" }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ ...type.label, color: colors.textMuted }}>BRAMBLE &amp; CO.</div>
-          <h1 style={{ ...type.headline, color: colors.textPrimary, marginTop: 14 }}>
-            AI-powered commerce,<br />with money under control.
-          </h1>
-          <p style={{ ...type.body, color: colors.textSecondary, marginTop: 20, maxWidth: 420 }}>
-            Let AI shop for your customers. Every purchase is independently verified before payment.
-          </p>
-          <button
-            onClick={() => onNavigate("demo")}
-            style={{
-              marginTop: 32, padding: "14px 28px", background: colors.verify, color: "#fff",
-              border: "none", borderRadius: 8, fontSize: 15, fontWeight: 700, cursor: "pointer",
-              boxShadow: shadow.soft,
-            }}
-          >
+      {/* HERO */}
+      <section style={{
+        padding: "100px 24px 80px", textAlign: "center", maxWidth: 900, margin: "0 auto",
+      }}>
+        <div className="reveal" style={{ ...type.label, color: colors.textMuted, marginBottom: 20 }}>
+          BRAMBLE & CO. · POWERED BY COVENANT
+        </div>
+        <h1 className="reveal" style={{ ...type.headline, color: colors.textPrimary, marginBottom: 24 }}>
+          AI-powered commerce,<br />with money under control.
+        </h1>
+        <p className="reveal" style={{
+          ...type.body, color: colors.textSecondary, maxWidth: 520, margin: "0 auto 36px", fontSize: 18,
+        }}>
+          Let AI reorder for your customers. Every rupee is independently verified before payment moves.
+        </p>
+        <div className="reveal" style={{ display: "flex", gap: 16, justifyContent: "center", alignItems: "center" }}>
+          <button className="btn-primary" onClick={() => onNavigate("demo")}>
             Start Demo
           </button>
+          <button className="btn-ghost" onClick={() => onNavigate("revenue")}>
+            See revenue impact
+          </button>
         </div>
+      </section>
 
-        <div>
-          {preview ? (
-            <div style={{
-              width: 220, padding: 24, borderRadius: 14, background: "#fff",
-              border: `1px solid ${colors.border}`, boxShadow: shadow.raised, textAlign: "center",
-            }}>
-              <div style={{ width: 64, height: 64, margin: "0 auto 16px", borderRadius: 10, background: colors.tan }} />
-              <div style={{ ...type.body, fontWeight: 700, color: colors.textPrimary }}>{preview[0].name}</div>
-              <div style={{ ...type.h3, color: colors.forest, marginTop: 6 }}>₹{(preview[0].price_paise / 100).toFixed(0)}</div>
+      {/* BIG METRIC CARD — RothFinder style */}
+      <section className="reveal" style={{ padding: "80px 24px 80px", maxWidth: 720, margin: "0 auto" }}>
+        <div style={{
+          background: colors.accentSoft, borderRadius: 20, padding: "36px 40px",
+          border: `1px solid ${colors.border}`,
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+            <div style={{ ...type.financial, fontSize: 48, color: colors.textPrimary, letterSpacing: -1 }}>
+              ₹5,750
             </div>
-          ) : (
-            <div style={{ color: colors.textMuted, fontSize: 13 }}>Loading…</div>
-          )}
+            <div style={{ ...type.small, color: colors.textSecondary, fontWeight: 600, textAlign: "right" }}>
+              With Covenant<br />autonomous agent
+            </div>
+          </div>
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16,
+            borderTop: `1px solid ${colors.border}`, paddingTop: 20,
+          }}>
+            <div>
+              <div style={{ ...type.financial, fontSize: 20, color: colors.textPrimary }}>+₹1,550</div>
+              <div style={{ ...type.small, color: colors.textMuted }}>Extra revenue</div>
+            </div>
+            <div>
+              <div style={{ ...type.financial, fontSize: 20, color: colors.textPrimary }}>100%</div>
+              <div style={{ ...type.small, color: colors.textMuted }}>Verified purchases</div>
+            </div>
+            <div>
+              <div style={{ ...type.financial, fontSize: 20, color: colors.textPrimary }}>1</div>
+              <div style={{ ...type.small, color: colors.textMuted }}>Attack blocked live</div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div style={{
-        margin: "0 56px 64px", padding: "24px 32px", background: colors.surface,
-        border: `1px solid ${colors.border}`, borderRadius: 12,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <span style={{ ...type.small, color: colors.textMuted, fontWeight: 600 }}>HOW IT WORKS</span>
-        <div style={{ display: "flex", gap: 0 }}>
-          {["Catalog", "Permission", "AI Decision", "Verification", "Payment"].map((step, i, arr) => (
-            <div key={step} style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ ...type.small, color: colors.textPrimary, fontWeight: 600 }}>{step}</span>
-              {i < arr.length - 1 && <span style={{ color: colors.border, margin: "0 16px" }}>→</span>}
-            </div>
+      {/* HOW IT WORKS */}
+      <section className="reveal" style={{ padding: "0 24px 100px", maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ ...type.label, color: colors.textMuted, marginBottom: 16, textAlign: "center" }}>
+          HOW IT WORKS
+        </div>
+        <div style={{
+          display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8, alignItems: "center",
+          background: colors.surface, borderRadius: 999, padding: "14px 28px",
+          border: `1px solid ${colors.border}`,
+        }}>
+          {["Catalog", "Permission", "AI Decision", "Verification", "Payment"].map((s, i, arr) => (
+            <span key={s} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontWeight: 700, fontSize: 14, color: colors.textPrimary }}>{s}</span>
+              {i < arr.length - 1 && <span style={{ color: colors.textMuted }}>→</span>}
+            </span>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div style={{ padding: "0 56px 80px", display: "flex", gap: 24 }}>
-        <MetricBlock value="₹5,750" label="Revenue from autonomous purchasing" />
-        <MetricBlock value="100%" label="Purchases independently verified" />
-        <MetricBlock value="1" label="Manipulation attempt blocked live" />
+      <div style={{
+        padding: "28px", borderTop: `1px solid ${colors.border}`, textAlign: "center",
+      }}>
+        <div style={{ ...type.small, color: colors.textMuted, fontWeight: 600 }}>
+          BUILT ON RAZORPAY · TEST MODE · NO REAL PAYMENTS
+        </div>
       </div>
-
-      <div style={{ padding: "0 56px 56px", borderTop: `1px solid ${colors.border}`, paddingTop: 28, textAlign: "center" }}>
-        <div style={{ ...type.small, color: colors.textMuted }}>BUILT ON RAZORPAY · TEST MODE · NO REAL PAYMENTS</div>
-      </div>
-    </div>
-  );
-}
-
-function MetricBlock({ value, label }) {
-  return (
-    <div style={{ flex: 1, padding: 24, background: "#fff", border: `1px solid ${colors.border}`, borderRadius: 12 }}>
-      <div style={{ ...type.headline, fontSize: 32, color: colors.textPrimary }}>{value}</div>
-      <div style={{ ...type.small, color: colors.textSecondary, marginTop: 8 }}>{label}</div>
     </div>
   );
 }

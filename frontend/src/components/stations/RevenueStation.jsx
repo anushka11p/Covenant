@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getRevenue } from "../../api";
 import { transformRevenue } from "../../domain/presentationTransforms";
+import { colors, type, shadow } from "../../theme";
 
 export default function RevenueStation({ merchantId }) {
   const [revenue, setRevenue] = useState(null);
@@ -36,36 +37,36 @@ export default function RevenueStation({ merchantId }) {
 
   return (
     <div>
-      <h2 style={{ color: "#f2f2f5" }}>Check Merchant Impact</h2>
-      <p style={{ color: "#9a9aa5", fontSize: 14 }}>Does this actually help Bramble & Co.?</p>
-      <button onClick={handleLoad} disabled={loading} style={btnStyle}>
+      <h2 style={{ ...type.h2, color: colors.textPrimary }}>Check Merchant Impact</h2>
+      <p style={{ ...type.body, color: colors.textSecondary }}>Does this actually help Bramble & Co.?</p>
+      <button onClick={handleLoad} disabled={loading} className="btn-primary">
         {loading ? "Loading…" : "Load Revenue Impact"}
       </button>
 
       {revenue && (
-        <div>
+        <div className="step-card">
           <div style={{ display: "flex", gap: 16, marginTop: 20 }}>
-            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: "#15151a", border: "1px solid #26262e", textAlign: "center" }}>
-              <div style={{ color: "#7a7a85", fontSize: 13 }}>WITHOUT AI BUYER</div>
-              <div style={{ color: "#c0c0cc", fontSize: 28, fontWeight: 700, marginTop: 6 }}>₹{revenue.withoutAI.toFixed(0)}</div>
+            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: colors.surface, border: `1px solid ${colors.border}`, textAlign: "center", boxShadow: shadow.soft }}>
+              <div style={{ ...type.label, color: colors.textMuted }}>WITHOUT AI BUYER</div>
+              <div style={{ ...type.financial, fontSize: 28, color: colors.textPrimary, marginTop: 6 }}>₹{revenue.withoutAI.toFixed(0)}</div>
             </div>
-            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: "#132014", border: "1px solid #4caf50", textAlign: "center" }}>
-              <div style={{ color: "#7a7a85", fontSize: 13 }}>WITH AI BUYER</div>
-              <div style={{ color: "#4caf50", fontSize: 28, fontWeight: 700, marginTop: 6 }}>₹{revenue.withAI.toFixed(0)}</div>
+            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: colors.successSoft, border: `1px solid ${colors.success}`, textAlign: "center", boxShadow: shadow.soft }}>
+              <div style={{ ...type.label, color: colors.success }}>WITH AI BUYER</div>
+              <div style={{ ...type.financial, fontSize: 28, color: colors.success, marginTop: 6 }}>₹{revenue.withAI.toFixed(0)}</div>
             </div>
           </div>
-          <div style={{ textAlign: "center", marginTop: 16, color: "#4caf50", fontSize: 20, fontWeight: 700 }}>
+          <div style={{ textAlign: "center", marginTop: 16, ...type.financial, fontSize: 22, color: colors.success }}>
             {animatedDelta >= 0 ? "+" : ""}₹{animatedDelta.toFixed(0)}
           </div>
-          <div style={{ textAlign: "center", color: "#7a7a85", fontSize: 13, marginTop: 4 }}>Additional merchant revenue</div>
-          <div style={{ textAlign: "center", color: "#9a9aa5", fontSize: 14, marginTop: 16, fontStyle: "italic" }}>
+          <div style={{ textAlign: "center", ...type.small, color: colors.textSecondary, marginTop: 4 }}>Additional merchant revenue</div>
+          <div style={{ textAlign: "center", ...type.body, color: colors.textSecondary, marginTop: 16, fontStyle: "italic" }}>
             "The AI keeps customers stocked instead of waiting for them to remember to reorder."
           </div>
-          <div style={{ textAlign: "center", color: "#5c5c66", fontSize: 11, marginTop: 8 }}>{revenue.note}</div>
+          <div style={{ textAlign: "center", ...type.small, fontSize: 11, color: colors.textMuted, marginTop: 8 }}>{revenue.note}</div>
         </div>
       )}
     </div>
   );
 }
 
-const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", background: "#2c2c34", color: "#f2f2f5", cursor: "pointer", fontSize: 14 };
+const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", background: colors.primary, color: "#fff", cursor: "pointer", fontSize: 14, fontWeight: 600 };

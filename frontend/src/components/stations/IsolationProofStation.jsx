@@ -2,6 +2,7 @@ import { useState } from "react";
 import { attemptAgentHack } from "../../api";
 import { transformHackAttempt } from "../../domain/presentationTransforms";
 import TechnicalDrawer from "../shared/TechnicalDrawer";
+import { colors, type, shadow } from "../../theme";
 
 export default function IsolationProofStation() {
   const [result, setResult] = useState(null);
@@ -17,21 +18,27 @@ export default function IsolationProofStation() {
 
   return (
     <div>
-      <h2 style={{ color: "#f2f2f5" }}>Test the Safety Lock</h2>
-      <p style={{ color: "#9a9aa5", fontSize: 14 }}>We intentionally try to let the AI access payment directly.</p>
-      <button onClick={handleTest} disabled={loading} style={{ ...btnStyle, background: "#3a2020", color: "#e05252" }}>
+      <h2 style={{ ...type.h2, color: colors.textPrimary }}>Test the Safety Lock</h2>
+      <p style={{ ...type.body, color: colors.textSecondary }}>We intentionally try to let the AI access payment directly.</p>
+      <button onClick={handleTest} disabled={loading} style={{ ...btnStyle, background: colors.dangerSoft, color: colors.danger, border: `1px solid ${colors.danger}` }}>
         {loading ? "Attempting…" : "🔒 Attempt Direct Payment Access"}
       </button>
 
       {result && (
-        <div style={{ marginTop: 20, padding: 20, borderRadius: 12, background: "#15151a", border: `1px solid ${result.blocked ? "#4caf50" : "#e05252"}` }}>
-          <div style={{ color: result.blocked ? "#4caf50" : "#e05252", fontSize: 15, fontWeight: 700 }}>
+        <div className="sharp-appear" style={{
+          marginTop: 20, padding: 20, borderRadius: 12,
+          background: result.blocked ? colors.successSoft : colors.dangerSoft,
+          border: `1px solid ${result.blocked ? colors.success : colors.danger}`,
+          borderLeft: `4px solid ${result.blocked ? colors.success : colors.danger}`,
+          boxShadow: shadow.soft,
+        }}>
+          <div style={{ ...type.h3, color: result.blocked ? colors.success : colors.danger }}>
             {result.blocked ? "BLOCKED" : "⚠️ UNEXPECTED: NOT BLOCKED"}
           </div>
-          <div style={{ color: "#c0c0cc", fontSize: 14, marginTop: 8 }}>
+          <div style={{ ...type.body, color: colors.textPrimary, marginTop: 8 }}>
             The AI does not have direct access to the payment system. Only the verified purchase path can authorize a payment.
           </div>
-          <div style={{ color: "#4caf50", fontSize: 13, marginTop: 10 }}>₹0 charged</div>
+          <div style={{ ...type.financial, fontSize: 15, color: colors.success, marginTop: 10 }}>₹0 charged</div>
         </div>
       )}
 
@@ -49,5 +56,5 @@ export default function IsolationProofStation() {
   );
 }
 
-const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", cursor: "pointer", fontSize: 14 };
-const linkStyle = { display: "block", marginTop: 14, background: "none", border: "none", color: "#7a9eff", cursor: "pointer", fontSize: 13, padding: 0 };
+const btnStyle = { padding: "10px 18px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 };
+const linkStyle = { display: "block", marginTop: 14, background: "none", border: "none", color: colors.primary, cursor: "pointer", fontSize: 13, padding: 0 };

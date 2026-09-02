@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createMandate } from "../../api";
 import { transformMandate } from "../../domain/presentationTransforms";
 import TechnicalDrawer from "../shared/TechnicalDrawer";
+import { colors, type, shadow } from "../../theme";
 
 export default function MandateStation({ principalId, merchantId, onCreated }) {
   const [mandate, setMandate] = useState(null);
@@ -30,15 +31,15 @@ export default function MandateStation({ principalId, merchantId, onCreated }) {
 
   return (
     <div>
-      <h2 style={{ color: "#f2f2f5" }}>Set Buying Permission</h2>
-      <p style={{ color: "#9a9aa5", fontSize: 14 }}>"Buy dog food for my dog — within these limits."</p>
-      <button onClick={handleCreate} disabled={loading} style={btnStyle}>
+      <h2 style={{ ...type.h2, color: colors.textPrimary }}>Set Buying Permission</h2>
+      <p style={{ ...type.body, color: colors.textSecondary }}>"Buy dog food for my dog — within these limits."</p>
+      <button onClick={handleCreate} disabled={loading} className="btn-primary">
         {loading ? "Creating…" : "Create Permission"}
       </button>
 
       {mandate && (
-        <div style={{ marginTop: 20, padding: 20, borderRadius: 12, background: "#15151a", border: "1px solid #26262e" }}>
-          <div style={{ color: "#4caf50", fontSize: 13, fontWeight: 700, letterSpacing: 0.5 }}>{mandate.title}</div>
+        <div className="step-card" style={{ marginTop: 20, padding: 20, borderRadius: 12, background: colors.surface, border: `1px solid ${colors.border}`, boxShadow: shadow.soft }}>
+          <div style={{ ...type.label, color: colors.success }}>{mandate.title}</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
             <Rule value={`₹${mandate.perPurchaseLimit}`} label="Per-purchase limit" />
             <Rule value={`₹${mandate.monthlyLimit}`} label="Monthly limit" />
@@ -65,11 +66,11 @@ export default function MandateStation({ principalId, merchantId, onCreated }) {
 function Rule({ value, label }) {
   return (
     <div>
-      <div style={{ color: "#f2f2f5", fontSize: 18, fontWeight: 700 }}>{value}</div>
-      <div style={{ color: "#7a7a85", fontSize: 12 }}>{label}</div>
+      <div style={{ ...type.h3, fontSize: 18, color: colors.textPrimary }}>{value}</div>
+      <div style={{ ...type.small, color: colors.textSecondary }}>{label}</div>
     </div>
   );
 }
 
-const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", background: "#2c2c34", color: "#f2f2f5", cursor: "pointer", fontSize: 14 };
-const linkStyle = { display: "block", marginTop: 14, background: "none", border: "none", color: "#7a9eff", cursor: "pointer", fontSize: 13, padding: 0 };
+const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", background: colors.primary, color: "#fff", cursor: "pointer", fontSize: 14, fontWeight: 600 };
+const linkStyle = { display: "block", marginTop: 14, background: "none", border: "none", color: colors.primary, cursor: "pointer", fontSize: 13, padding: 0 };

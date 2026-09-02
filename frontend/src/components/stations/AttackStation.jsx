@@ -2,9 +2,8 @@ import { useState } from "react";
 import { runAttackScenario } from "../../api";
 import { transformAttackScenario } from "../../domain/presentationTransforms";
 import TechnicalDrawer from "../shared/TechnicalDrawer";
+import StatusBadge from "../StatusBadge";
 import { colors, type, shadow } from "../../theme";
-
-const BEATS = ["idle", "confidence", "surprise", "danger", "relief", "trust"];
 
 export default function AttackStation({ mandateId, onCompleted }) {
   const [beat, setBeat] = useState("idle");
@@ -16,7 +15,7 @@ export default function AttackStation({ mandateId, onCompleted }) {
     await sleep(600);
     setBeat("surprise");
 
-    const raw = await runAttackScenario(mandateId); // real API call happens here
+    const raw = await runAttackScenario(mandateId);
     const transformed = transformAttackScenario(raw);
     setResult(transformed);
     onCompleted?.(raw);
@@ -33,21 +32,21 @@ export default function AttackStation({ mandateId, onCompleted }) {
     <div>
       <h2 style={{ ...type.h2, color: colors.textPrimary }}>Run Attack Test</h2>
       <p style={{ ...type.body, color: colors.textSecondary }}>See what happens when a product listing tries to trick the AI.</p>
-      <button onClick={handleRun} disabled={beat !== "idle"} style={btnStyle}>
+      <button onClick={handleRun} disabled={beat !== "idle"} className="btn-primary">
         {beat === "idle" ? "Run Attack Scenario" : "Running…"}
       </button>
 
       {beat !== "idle" && (
         <div style={{ marginTop: 20 }}>
-          {(beat === "confidence") && (
-            <StatusLine color={colors.forest}>✓ Product found &nbsp; ✓ Ready to purchase</StatusLine>
+          {beat === "confidence" && (
+            <div style={{ ...type.small, color: colors.forest, marginBottom: 10 }}>✓ Product found &nbsp; ✓ Ready to purchase</div>
           )}
 
           {(beat === "surprise" || beat === "danger" || beat === "relief" || beat === "trust") && (
             <div>
-              <StatusLine color={colors.caution}>⚠️ Product information changed the AI's recommendation</StatusLine>
+              <div style={{ ...type.small, color: colors.caution, marginBottom: 10 }}>⚠️ Product information changed the AI's recommendation</div>
               {result && (
-                <Card border={colors.caution}>
+                <Card border={colors.caution} bg={colors.cautionSoft}>
                   <div style={{ ...type.body, color: colors.textPrimary }}>Proposed purchase</div>
                   <div style={{ ...type.h3, color: colors.caution, marginTop: 4 }}>{result.proposedSku} (compromised listing)</div>
                   <div style={{ ...type.small, color: colors.textMuted, marginTop: 6 }}>But permission says: NO CHICKEN</div>
@@ -57,22 +56,24 @@ export default function AttackStation({ mandateId, onCompleted }) {
           )}
 
           {(beat === "danger" || beat === "relief" || beat === "trust") && (
-            <Card border={colors.blocked}>
-              <div style={{ ...type.label, color: colors.blocked }}>SAFETY CHECK</div>
-              <div style={{ ...type.body, color: colors.textPrimary, marginTop: 6 }}>✕ BLOCKED — Chicken is not allowed for this customer</div>
-              <div style={{ ...type.small, color: colors.forest, marginTop: 8 }}>₹0 charged</div>
+            <Card border={colors.blocked} bg={colors.blockedSoft} accent>
+              <StatusBadge status="blocked" />
+              <div style={{ ...type.body, color: colors.textPrimary, marginTop: 10, fontWeight: 600 }}>
+                Chicken is not allowed for this customer
+              </div>
+              <div style={{ ...type.financial, fontSize: 15, color: colors.blocked, marginTop: 8 }}>₹0 charged</div>
             </Card>
           )}
 
           {(beat === "relief" || beat === "trust") && (
-            <Card border={colors.forest}>
-              <div style={{ ...type.label, color: colors.forest }}>RECOVERING…</div>
-              <div style={{ ...type.body, color: colors.textPrimary, marginTop: 6 }}>Safe product restored. Payment complete.</div>
+            <Card border={colors.forest} bg={colors.forestSoft} accent>
+              <StatusBadge status="recovered" />
+              <div style={{ ...type.body, color: colors.textPrimary, marginTop: 10 }}>Safe product restored. Payment complete.</div>
             </Card>
           )}
 
           {beat === "trust" && (
-            <div style={{ marginTop: 12, color: colors.forest, ...type.small, lineHeight: 1.8 }}>
+            <div style={{ marginTop: 12, color: colors.forest, ...type.small, lineHeight: 1.8, fontWeight: 600 }}>
               ✓ Mandate preserved &nbsp; ✓ Unsafe purchase blocked &nbsp; ✓ Customer protected &nbsp; ✓ Merchant sale recovered
             </div>
           )}
@@ -93,13 +94,14 @@ export default function AttackStation({ mandateId, onCompleted }) {
   );
 }
 
-function StatusLine({ color, children }) {
-  return <div style={{ color, fontSize: 14, marginBottom: 10 }}>{children}</div>;
-}
-
-function Card({ border, children }) {
+function Card({ border, bg, accent, children }) {
   return (
-    <div style={{ padding: 14, borderRadius: 10, background: colors.surface, border: `1px solid ${border}`, marginTop: 10, boxShadow: shadow.soft }}>
+    <div style={{
+      padding: 16, borderRadius: 10, background: bg, marginTop: 10,
+      border: `1px solid ${border}`,
+      borderLeft: accent ? `4px solid ${border}` : `1px solid ${border}`,
+      boxShadow: shadow.soft,
+    }}>
       {children}
     </div>
   );
