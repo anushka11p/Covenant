@@ -10,4 +10,4 @@ rm -rf static
 cp -r ../frontend/dist static
 
 pip install -r requirements.txt
-python3 models/seed.py
+PYTHONPATH=. python3 models/seed.py
