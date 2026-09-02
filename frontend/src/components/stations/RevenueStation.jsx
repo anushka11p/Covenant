@@ -1,12 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { getRevenue } from "../../api";
 import { transformRevenue } from "../../domain/presentationTransforms";
-import { colors, type, shadow } from "../../theme";
+import Icon from "../shared/Icon";
+import { colors, type } from "../../theme";
+
+const CoinStackScene = lazy(() => import("../3d/CoinStackScene"));
+
+function useCountUp(target, duration = 1200) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (target === 0) return;
+    const steps = 40;
+    const increment = target / steps;
+    const delay = duration / steps;
+    let current = 0;
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setValue(target);
+        clearInterval(interval);
+      } else {
+        setValue(current);
+      }
+    }, delay);
+    return () => clearInterval(interval);
+  }, [target, duration]);
+
+  return value;
+}
 
 export default function RevenueStation({ merchantId }) {
   const [revenue, setRevenue] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [animatedDelta, setAnimatedDelta] = useState(0);
+
+  const animWithoutAI = useCountUp(revenue?.withoutAI ?? 0, 1000);
+  const animWithAI = useCountUp(revenue?.withAI ?? 0, 1200);
+  const animDelta = useCountUp(revenue?.delta ?? 0, 1400);
 
   async function handleLoad() {
     setLoading(true);
@@ -16,57 +46,226 @@ export default function RevenueStation({ merchantId }) {
     setLoading(false);
   }
 
-  useEffect(() => {
-    if (!revenue) return;
-    const target = revenue.delta;
-    const duration = 800;
-    const steps = 30;
-    const increment = target / steps;
-    let current = 0;
-    const interval = setInterval(() => {
-      current += increment;
-      if ((increment > 0 && current >= target) || (increment < 0 && current <= target)) {
-        setAnimatedDelta(target);
-        clearInterval(interval);
-      } else {
-        setAnimatedDelta(current);
-      }
-    }, duration / steps);
-    return () => clearInterval(interval);
-  }, [revenue]);
-
   return (
     <div>
-      <h2 style={{ ...type.h2, color: colors.textPrimary }}>Check Merchant Impact</h2>
-      <p style={{ ...type.body, color: colors.textSecondary }}>Does this actually help Bramble & Co.?</p>
-      <button onClick={handleLoad} disabled={loading} className="btn-primary">
-        {loading ? "Loading…" : "Load Revenue Impact"}
-      </button>
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ ...type.label, color: colors.textMuted, marginBottom: 12 }}>
+          MERCHANT IMPACT · REAL DATA
+        </div>
+        <h2
+          style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 28,
+            fontWeight: 800,
+            color: colors.textPrimary,
+            letterSpacing: "-0.5px",
+            marginBottom: 12,
+          }}
+        >
+          Revenue Impact
+        </h2>
+        <p style={{ ...type.body, color: colors.textSecondary, maxWidth: 480, lineHeight: 1.7 }}>
+          Does autonomous reordering actually help Bramble &amp; Co.? Here&apos;s the real data
+          from backend transactions.
+        </p>
+      </div>
+
+      {!revenue && (
+        <button
+          id="revenue-load-btn"
+          className="btn-primary"
+          onClick={handleLoad}
+          disabled={loading}
+        >
+          {loading ? "LOADING DATA…" : "LOAD REVENUE IMPACT"}
+        </button>
+      )}
 
       {revenue && (
         <div className="step-card">
-          <div style={{ display: "flex", gap: 16, marginTop: 20 }}>
-            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: colors.surface, border: `1px solid ${colors.border}`, textAlign: "center", boxShadow: shadow.soft }}>
-              <div style={{ ...type.label, color: colors.textMuted }}>WITHOUT AI BUYER</div>
-              <div style={{ ...type.financial, fontSize: 28, color: colors.textPrimary, marginTop: 6 }}>₹{revenue.withoutAI.toFixed(0)}</div>
+          {/* Main comparison */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr auto 1fr",
+              gap: 20,
+              alignItems: "center",
+              marginBottom: 24,
+            }}
+          >
+            {/* Without */}
+            <div
+              style={{
+                padding: "20px",
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.05)",
+                borderRadius: 8,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ ...type.label, color: colors.textMuted, marginBottom: 10, fontSize: 10 }}>
+                WITHOUT COVENANT
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 32,
+                  fontWeight: 800,
+                  color: colors.textSecondary,
+                }}
+              >
+                ₹{animWithoutAI.toFixed(0)}
+              </div>
+              <div style={{ ...type.small, color: colors.textMuted, marginTop: 6, fontSize: 12 }}>
+                Manual orders only
+              </div>
             </div>
-            <div style={{ flex: 1, padding: 20, borderRadius: 12, background: colors.successSoft, border: `1px solid ${colors.success}`, textAlign: "center", boxShadow: shadow.soft }}>
-              <div style={{ ...type.label, color: colors.success }}>WITH AI BUYER</div>
-              <div style={{ ...type.financial, fontSize: 28, color: colors.success, marginTop: 6 }}>₹{revenue.withAI.toFixed(0)}</div>
+
+            {/* Vs */}
+            <div
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 18,
+                fontWeight: 800,
+                color: colors.textMuted,
+                textAlign: "center",
+              }}
+            >
+              VS
+            </div>
+
+            {/* With */}
+            <div
+              style={{
+                padding: "20px",
+                background: "rgba(16,208,122,0.05)",
+                border: "1px solid rgba(16,208,122,0.2)",
+                borderRadius: 8,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ ...type.label, color: "#10D07A", marginBottom: 10, fontSize: 10 }}>
+                WITH COVENANT
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 32,
+                  fontWeight: 800,
+                  color: "#10D07A",
+                }}
+              >
+                ₹{animWithAI.toFixed(0)}
+              </div>
+              <div style={{ ...type.small, color: "rgba(16,208,122,0.7)", marginTop: 6, fontSize: 12 }}>
+                Autonomous + manual
+              </div>
             </div>
           </div>
-          <div style={{ textAlign: "center", marginTop: 16, ...type.financial, fontSize: 22, color: colors.success }}>
-            {animatedDelta >= 0 ? "+" : ""}₹{animatedDelta.toFixed(0)}
+
+          {/* Delta highlight */}
+          <div
+            style={{
+              padding: "20px 24px",
+              background: "linear-gradient(135deg, rgba(16,208,122,0.08) 0%, rgba(37,99,235,0.04) 100%)",
+              border: "1px solid rgba(16,208,122,0.15)",
+              borderRadius: 8,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <div>
+              <div style={{ ...type.label, color: "#10D07A", fontSize: 10, marginBottom: 6 }}>
+                ADDITIONAL REVENUE CAPTURED
+              </div>
+              <div
+                style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 40,
+                  fontWeight: 800,
+                  color: "#10D07A",
+                  lineHeight: 1,
+                }}
+              >
+                +₹{animDelta.toFixed(0)}
+              </div>
+            </div>
+            <Suspense fallback={null}>
+              <CoinStackScene coinCount={5} size={100} />
+            </Suspense>
           </div>
-          <div style={{ textAlign: "center", ...type.small, color: colors.textSecondary, marginTop: 4 }}>Additional merchant revenue</div>
-          <div style={{ textAlign: "center", ...type.body, color: colors.textSecondary, marginTop: 16, fontStyle: "italic" }}>
-            "The AI keeps customers stocked instead of waiting for them to remember to reorder."
+
+          {/* Narrative */}
+          <div
+            style={{
+              padding: "16px 20px",
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.04)",
+              borderRadius: 8,
+              marginBottom: 16,
+            }}
+          >
+            <div style={{ ...type.label, color: colors.textMuted, fontSize: 10, marginBottom: 12 }}>
+              WHY THIS MATTERS
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <NarrativeRow
+                icon="brain"
+                before="Customer forgets to reorder"
+                after="AI detects low stock, proposes reorder"
+              />
+              <NarrativeRow
+                icon="scale"
+                before="Merchant loses the sale"
+                after="Policy Engine validates & clears"
+              />
+              <NarrativeRow
+                icon="card"
+                before="Revenue never captured"
+                after="Razorpay executes payment"
+              />
+              <NarrativeRow
+                icon="trending"
+                before="Static revenue ceiling"
+                after="Autonomous revenue growth"
+              />
+            </div>
           </div>
-          <div style={{ textAlign: "center", ...type.small, fontSize: 11, color: colors.textMuted, marginTop: 8 }}>{revenue.note}</div>
+
+          {revenue.note && (
+            <div
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 10,
+                color: colors.textMuted,
+                letterSpacing: "0.06em",
+                fontStyle: "italic",
+              }}
+            >
+              {revenue.note}
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-const btnStyle = { padding: "10px 18px", borderRadius: 8, border: "none", background: colors.primary, color: "#fff", cursor: "pointer", fontSize: 14, fontWeight: 600 };
+function NarrativeRow({ icon, before, after }) {
+  return (
+    <div>
+      <div style={{ marginBottom: 8 }}>
+        <Icon name={icon} size={16} color="#10D07A" strokeWidth={1.5} />
+      </div>
+      <div style={{ ...type.small, fontSize: 11, color: colors.textMuted, marginBottom: 3, textDecoration: "line-through" }}>
+        {before}
+      </div>
+      <div style={{ ...type.small, fontSize: 11, color: "#10D07A" }}>
+        {after}
+      </div>
+    </div>
+  );
+}

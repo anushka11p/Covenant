@@ -1,46 +1,131 @@
+// Covenant — Premium Dark Fintech Design Tokens
+
 export const colors = {
-  bg: "#EEF1FF",
-  surface: "#FFFFFF",
-  surfaceRaised: "#E0E7FF",
-  border: "#C7D2FE",
-  borderSubtle: "#E0E7FF",
-  textPrimary: "#0A0A0A",
-  textSecondary: "#374151",
-  textMuted: "#6B7280",
-  primary: "#22C55E",
-  primaryHover: "#16A34A",
-  success: "#16A34A",
-  successSoft: "#DCFCE7",
-  danger: "#DC2626",
-  dangerSoft: "#FEE2E2",
-  warning: "#D97706",
-  warningSoft: "#FEF3C7",
-  accent: "#4F46E5",
-  accentSoft: "#C7D2FE",
-  forest: "#0A0A0A",
-  forestSoft: "#E0E7FF",
-  verify: "#22C55E",
-  verifySoft: "#DCFCE7",
-  blocked: "#DC2626",
-  blockedSoft: "#FEE2E2",
-  tan: "#C7D2FE",
+  // Core
+  bg: "#090B0F",
+  surface: "#0F1318",
+  surfaceRaised: "#161C24",
+  surfaceHigh: "#1D2530",
+  border: "rgba(255,255,255,0.06)",
+  borderMid: "rgba(255,255,255,0.10)",
+  borderStrong: "rgba(255,255,255,0.18)",
+
+  // Text
+  textPrimary: "#F0EFE9",
+  textSecondary: "#8A8F9E",
+  textMuted: "#3D4452",
+  textDim: "#2A3040",
+
+  // Status
+  success: "#10D07A",
+  successSoft: "rgba(16,208,122,0.10)",
+  successBorder: "rgba(16,208,122,0.25)",
+  danger: "#FF3B3B",
+  dangerSoft: "rgba(255,59,59,0.10)",
+  dangerBorder: "rgba(255,59,59,0.25)",
+  warning: "#F59E0B",
+  warningSoft: "rgba(245,158,11,0.10)",
+  warningBorder: "rgba(245,158,11,0.25)",
+
+  // Accents
+  accent: "#2563EB",
+  accentSoft: "rgba(37,99,235,0.10)",
+
+  // Aliases (backwards compatibility)
+  primary: "#10D07A",
+  primaryHover: "#0EBC6D",
+  verify: "#10D07A",
+  verifySoft: "rgba(16,208,122,0.10)",
+  blocked: "#FF3B3B",
+  blockedSoft: "rgba(255,59,59,0.10)",
+  caution: "#F59E0B",
+  cautionSoft: "rgba(245,158,11,0.10)",
+  forest: "#10D07A",
+  forestSoft: "rgba(16,208,122,0.10)",
+  tan: "rgba(255,255,255,0.06)",
 };
 
 export const shadow = {
-  soft: "0 4px 24px rgba(15, 23, 42, 0.06)",
-  raised: "0 16px 48px rgba(15, 23, 42, 0.10)",
+  soft: "0 4px 24px rgba(0,0,0,0.3)",
+  raised: "0 16px 64px rgba(0,0,0,0.5)",
+  glow: "0 0 40px rgba(16,208,122,0.12)",
+  glowRed: "0 0 40px rgba(255,59,59,0.12)",
 };
 
 export const type = {
-  sansFamily: "'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-  serifFamily: "'Public Sans', sans-serif",
-  headline: { fontFamily: "'Public Sans', sans-serif", fontSize: 56, fontWeight: 800, lineHeight: 1.05, letterSpacing: -1.5 },
-  h2: { fontFamily: "'Public Sans', sans-serif", fontSize: 28, fontWeight: 800, lineHeight: 1.15, letterSpacing: -0.5 },
-  h3: { fontFamily: "'Public Sans', sans-serif", fontSize: 18, fontWeight: 700, lineHeight: 1.3 },
-  body: { fontFamily: "'Public Sans', sans-serif", fontSize: 16, fontWeight: 400, lineHeight: 1.6 },
-  small: { fontFamily: "'Public Sans', sans-serif", fontSize: 14, fontWeight: 400, lineHeight: 1.5 },
-  label: { fontFamily: "'Public Sans', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: 1.4, textTransform: "uppercase" },
-  financial: { fontFamily: "'Public Sans', sans-serif", fontVariantNumeric: "tabular-nums", fontWeight: 800 },
+  sansFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+  serifFamily: "'Syne', sans-serif",
+  monoFamily: "'JetBrains Mono', monospace",
+
+  // Display
+  display: {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 80,
+    fontWeight: 800,
+    lineHeight: 0.92,
+    letterSpacing: -3,
+  },
+
+  // Headlines
+  headline: {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 56,
+    fontWeight: 800,
+    lineHeight: 1.0,
+    letterSpacing: -2,
+  },
+  h2: {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 32,
+    fontWeight: 700,
+    lineHeight: 1.1,
+    letterSpacing: -0.8,
+  },
+  h3: {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 20,
+    fontWeight: 700,
+    lineHeight: 1.25,
+    letterSpacing: -0.3,
+  },
+
+  // Body
+  body: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 16,
+    fontWeight: 400,
+    lineHeight: 1.65,
+  },
+  small: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: 14,
+    fontWeight: 400,
+    lineHeight: 1.5,
+  },
+
+  // Label / caps
+  label: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 11,
+    fontWeight: 500,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+  },
+
+  // Financial numbers
+  financial: {
+    fontFamily: "'Syne', sans-serif",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 800,
+  },
+
+  // Mono / technical
+  mono: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 13,
+    fontWeight: 400,
+    lineHeight: 1.6,
+  },
 };
 
 export const space = (n) => `${n * 4}px`;

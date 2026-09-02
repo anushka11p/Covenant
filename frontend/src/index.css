@@ -1,135 +1,302 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap');
+/* ============================================================
+   COVENANT — PREMIUM DARK FINTECH DESIGN SYSTEM
+   ============================================================ */
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
-  background: #EEF1FF;
-  color: #0A0A0A;
-  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #090B0F;
+  color: #F0EFE9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 button { font-family: inherit; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 
-.btn-primary {
-  background: #22C55E;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 14px 28px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
-}
-.btn-primary:hover {
-  background: #16A34A;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-}
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+/* ── Typography ── */
+.font-syne { font-family: 'Syne', sans-serif; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
 
+/* ── Primary Button ── */
+.btn-primary {
+  background: #10D07A;
+  color: #050705;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 32px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16,208,122,0.35); }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── Ghost Button ── */
 .btn-ghost {
   background: transparent;
-  color: #0A0A0A;
-  border: none;
-  font-size: 15px;
+  color: #8A8F9E;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 14px 32px;
+  font-size: 14px;
   font-weight: 600;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover { color: #F0EFE9; border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+.btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── Secondary Button ── */
+.btn-secondary {
+  background: transparent;
+  color: #10D07A;
+  border: 1px solid rgba(16,208,122,0.4);
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover { background: rgba(16,208,122,0.08); border-color: #10D07A; transform: translateY(-1px); }
+.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── Danger Button ── */
+.btn-danger {
+  background: rgba(255,59,59,0.1);
+  color: #FF3B3B;
+  border: 1px solid rgba(255,59,59,0.35);
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn-danger:hover { background: rgba(255,59,59,0.18); border-color: #FF3B3B; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(255,59,59,0.2); }
+.btn-danger:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── Link Button ── */
+.btn-link {
+  background: none;
+  border: none;
+  color: #8A8F9E;
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  padding: 0;
   text-decoration: underline;
   text-underline-offset: 3px;
-  padding: 8px 4px;
+  transition: color 0.15s;
+}
+.btn-link:hover { color: #F0EFE9; }
+
+/* ── Status Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.badge-clear { background: rgba(16,208,122,0.12); color: #10D07A; border: 1px solid rgba(16,208,122,0.25); }
+.badge-blocked { background: rgba(255,59,59,0.12); color: #FF3B3B; border: 1px solid rgba(255,59,59,0.25); }
+.badge-pending { background: rgba(245,158,11,0.12); color: #F59E0B; border: 1px solid rgba(245,158,11,0.25); }
+.badge-info { background: rgba(138,143,158,0.12); color: #8A8F9E; border: 1px solid rgba(138,143,158,0.2); }
+
+/* ── Section cards ── */
+.station-card {
+  background: #0F1318;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.station-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.08) 60%, transparent 100%);
 }
 
-.status-blocked {
-  background: #FEE2E2;
-  border: 1px solid #FECACA;
-  border-left: 4px solid #DC2626;
-  border-radius: 14px;
-  padding: 18px 20px;
-}
-.status-success {
-  background: #DCFCE7;
-  border: 1px solid #BBF7D0;
-  border-left: 4px solid #16A34A;
-  border-radius: 14px;
-  padding: 18px 20px;
+.inner-card {
+  background: #161C24;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 20px;
 }
 
-/* Scroll reveal */
+/* ── Section label ── */
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #3D4452;
+}
+
+.section-label-active {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #10D07A;
+}
+
+/* ── Divider line ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  margin: 28px 0;
+}
+
+/* ── Scroll Reveal ── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.section-card {
-  background: #FFFFFF;
-  border: 1px solid #C7D2FE;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+/* ── Step Card Animation ── */
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step-card {
+  animation: stepIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Missing keyframes referenced by station components — restores fade/appear motion */
+/* ── Sharp appear ── */
+@keyframes sharpAppear {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.sharp-appear {
+  animation: sharpAppear 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Fade Rise In ── */
 @keyframes fadeRiseIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.step-card {
-  animation: fadeRiseIn 220ms ease both;
+.fade-rise {
+  animation: fadeRiseIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes sharpAppear {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.sharp-appear {
-  animation: sharpAppear 120ms ease-out both;
-}
-
+/* ── Pulse (active state) ── */
 @keyframes softPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.28); }
-  50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 208, 122, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(16, 208, 122, 0); }
 }
-.active-pulse {
-  animation: softPulse 1.4s ease-in-out infinite;
+.active-pulse { animation: softPulse 2s ease-in-out infinite; }
+
+/* ── Glow Pulse (blocked) ── */
+@keyframes blockPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 59, 59, 0.25); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 59, 59, 0); }
+}
+.block-pulse { animation: blockPulse 1.5s ease-in-out infinite; }
+
+/* ── Scan line ── */
+@keyframes scanLine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Secondary/danger button variant, matches .btn-primary's motion language */
-.btn-secondary {
-  background: transparent;
-  color: inherit;
-  border: 1.5px solid currentColor;
-  border-radius: 999px;
-  padding: 14px 28px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: background 0.15s ease, transform 0.1s ease;
+/* ── Policy check ── */
+@keyframes policyCheck {
+  0% { opacity: 0; transform: translateX(-8px); }
+  100% { opacity: 1; transform: translateX(0); }
 }
-.btn-secondary:hover {
-  transform: translateY(-1px);
+.policy-check {
+  animation: policyCheck 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-/* Staggered children — used with data-stagger on a .reveal parent */
+/* ── Stagger children ── */
 .stagger-child {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(16px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.stagger-child.visible {
-  opacity: 1;
-  transform: translateY(0);
+.stagger-child.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #090B0F; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Selection ── */
+::selection { background: rgba(16,208,122,0.25); color: #F0EFE9; }
+
+/* ── Audit ledger ── */
+.audit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
+}
+.audit-row:last-child { border-bottom: none; }
+
+/* ── Pre / JSON viewer ── */
+.json-viewer {
+  background: #070A0D;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #6B7280;
+  overflow-x: auto;
+  line-height: 1.6;
 }
 
-/* Respect reduced-motion: kill all custom animation/transition delays */
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
