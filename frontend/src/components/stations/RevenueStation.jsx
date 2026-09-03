@@ -186,11 +186,11 @@ export default function RevenueStation({ merchantId }) {
                   fontFamily: "'Syne', sans-serif",
                   fontSize: 40,
                   fontWeight: 800,
-                  color: "#10D07A",
+                  color: animDelta >= 0 ? "#10D07A" : "#E05252",
                   lineHeight: 1,
                 }}
               >
-                +₹{animDelta.toFixed(0)}
+                {animDelta >= 0 ? "+" : "-"}₹{Math.abs(animDelta).toFixed(0)}
               </div>
             </div>
             <Suspense fallback={null}>
