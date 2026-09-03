@@ -120,9 +120,14 @@ class PolicyEngine:
         txn.status = TransactionStatus.approved
         session.commit()
 
+        # Razorpay caps receipt at 56 chars; idempotency_key (a full SHA-256
+        # hex digest) is 64 chars, so we truncate ONLY the receipt field here.
+        # The full idempotency_key still enforces real uniqueness at the DB
+        # level (Transaction.idempotency_key column) — this truncation never
+        # touches that constraint, it only shortens what Razorpay displays.
         order = create_order(
             amount_paise=proposal.amount_paise, currency=mandate.currency,
-            receipt=idempotency_key, notes={"mandate_id": mandate.mandate_id, "transaction_id": str(txn.id)},
+            receipt=idempotency_key[:56], notes={"mandate_id": mandate.mandate_id, "transaction_id": str(txn.id)},
         )
         txn.razorpay_order_id = order["id"]
         session.commit()
