@@ -9,13 +9,6 @@ const CoinStackScene = lazy(() => import("../components/3d/CoinStackScene"));
 
 const MERCHANT_ID = 1;
 
-const METRICS = [
-  { label: "TRANSACTIONS BLOCKED", value: "1", unit: "attack stopped", color: "#FF3B3B" },
-  { label: "PURCHASES RECOVERED", value: "1", unit: "after attack", color: "#F59E0B" },
-  { label: "REVENUE CAPTURED", value: "₹5,750", unit: "with AI agent", color: "#10D07A" },
-  { label: "CUSTOMERS PROTECTED", value: "100%", unit: "allergen safe", color: "#2563EB" },
-];
-
 const NARRATIVE = [
   {
     icon: "brain",
@@ -88,49 +81,6 @@ export default function RevenuePage({ activeNav, onNavigate }) {
             Covenant isn&apos;t just a security layer. It&apos;s the trust mechanism
             that makes autonomous reordering commercially viable for merchants.
           </p>
-        </div>
-
-        {/* ── Metrics grid ── */}
-        <div
-          className="reveal"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: 16,
-            marginBottom: 80,
-          }}
-        >
-          {METRICS.map((m) => (
-            <div
-              key={m.label}
-              style={{
-                padding: "24px",
-                background: colors.surface,
-                border: `1px solid ${m.color}20`,
-                borderTop: `3px solid ${m.color}40`,
-                borderRadius: 8,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "'Syne', sans-serif",
-                  fontSize: 36,
-                  fontWeight: 800,
-                  color: m.color,
-                  lineHeight: 1,
-                  marginBottom: 8,
-                }}
-              >
-                {m.value}
-              </div>
-              <div style={{ ...type.label, color: colors.textMuted, fontSize: 10, marginBottom: 4 }}>
-                {m.label}
-              </div>
-              <div style={{ ...type.small, color: m.color, fontSize: 12, opacity: 0.8 }}>
-                {m.unit}
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* ── Revenue narrative ── */}
