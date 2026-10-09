@@ -18,8 +18,6 @@ This isn't hypothetical. Razorpay and NPCI have already piloted exactly this ide
 
 Covenant is what the trust layer underneath that idea looks like when you also plan for the AI getting it wrong. Our **Mandate** object is the same concept as UPI Reserve Pay's per-merchant spending limit — a structured, pre-authorized boundary the agent operates inside. The difference is what happens at the edge of that boundary: we built and demonstrated the deterministic gate that catches the AI when it's manipulated, not just when it behaves.
 
-So we didn't try to make our AI unhackable. We made it *not matter* if it's hacked.
-
 ## The Story
 
 **Bramble & Co.** sells dog food. A customer lets an AI agent reorder automatically. The customer sets a **Mandate**: a structured, cryptographically signed permission — spend up to ₹2,500 per order, ₹6,000 a month, dog food and treats only, and *never* anything with chicken, because their dog is allergic.
